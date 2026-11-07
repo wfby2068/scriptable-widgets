@@ -89,10 +89,10 @@ function row(parent, left, daysStr, dateStr, days, highlight) {
 }
 
 // 右侧三栏固定宽度:天数 | 点 | 日期,各行左对齐,点和日期严格对齐
-const COL_W = 108;
+const COL_W = 122;
 const DAYS_W = 36;
 const DOT_W = 14;
-const DATE_W = 58;
+const DATE_W = 72;
 
 function valueStack(parent, daysStr, dateStr, color) {
   const s = parent.addStack();
@@ -126,7 +126,7 @@ if (family === "small") {
   head.addSpacer();
   text(head, md(today) + " 周" + WEEK[today.getDay()], 12, GRAY, false);
   w.addSpacer(8);
-  rows.forEach(r => row(w, r.name + " " + r.tail, r.days + " 天", md(r.due) + " 还", r.days, r === best));
+  rows.forEach(r => row(w, r.name + " " + r.tail, r.days + " 天", md(r.due) + "还款", r.days, r === best));
   w.addSpacer(8);
   const foot = best.days >= 57
     ? "今天就是最长窗口 · 下个最长窗口:" + md(nextWin.start) + " " + nextWin.name
