@@ -4,7 +4,7 @@
 
 const CARDS = [
   { name: "CSP", tail: "4588", closeDay: 24 },
-  { name: "Flex", tail: "5349", closeDay: 20 },
+  { name: "CFF", tail: "5349", closeDay: 20 },
   { name: "CFU", tail: "8285", closeDay: 19 },
   { name: "Slate", tail: "5253", closeDay: 16 },
   { name: "Boundless", tail: "8248", closeDay: 10 },
@@ -80,12 +80,13 @@ function mtext(parent, str, size, color, bold) {
   return t;
 }
 
-function row(parent, left, right, days, highlight) {
+function row(parent, left, right, days) {
   const s = parent.addStack();
   s.layoutHorizontally();
-  text(s, left, 12, WHITE, highlight);
+  const c = gradColor(days, minDays, maxDays);
+  text(s, left, 12, c, false);
   s.addSpacer();
-  mtext(s, right, 12, gradColor(days, minDays, maxDays));
+  mtext(s, right, 12, c);
 }
 
 const family = config.widgetFamily || "medium";
@@ -107,7 +108,7 @@ if (family === "small") {
   head.addSpacer();
   text(head, md(today) + " 周" + WEEK[today.getDay()], 12, GRAY, false);
   w.addSpacer(14);
-  rows.forEach(r => row(w, r.name + " " + r.tail, r.days + " 天 · " + md(r.due) + "还款", r.days, r === best));
+  rows.forEach(r => row(w, r.name + " " + r.tail, r.days + " 天 · " + md(r.due) + "还款", r.days));
   w.addSpacer(14);
   const foot = best.days >= 57
     ? "今天就是最长窗口 · 下个最长窗口:" + md(nextWin.start) + " " + nextWin.name
