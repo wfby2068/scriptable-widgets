@@ -80,31 +80,12 @@ function mtext(parent, str, size, color, bold) {
   return t;
 }
 
-function row(parent, left, daysStr, dateStr, days, highlight) {
+function row(parent, left, right, days, highlight) {
   const s = parent.addStack();
   s.layoutHorizontally();
   text(s, left, 12, WHITE, highlight);
   s.addSpacer();
-  valueStack(s, daysStr, dateStr, gradColor(days, minDays, maxDays));
-}
-
-// 右侧三栏固定宽度:天数 | 点 | 日期,各行左对齐,点和日期严格对齐
-const COL_W = 122;
-const DAYS_W = 36;
-const DOT_W = 14;
-const DATE_W = 72;
-
-function valueStack(parent, daysStr, dateStr, color) {
-  const s = parent.addStack();
-  s.layoutHorizontally();
-  s.size = new Size(COL_W, 18);
-  const c1 = s.addStack(); c1.size = new Size(DAYS_W, 18);
-  mtext(c1, daysStr, 12, color);
-  const c2 = s.addStack(); c2.size = new Size(DOT_W, 18);
-  mtext(c2, "·", 12, color);
-  const c3 = s.addStack(); c3.size = new Size(DATE_W, 18);
-  const t3 = mtext(c3, dateStr, 12, color); t3.rightAlignText();
-  return s;
+  mtext(s, right, 12, gradColor(days, minDays, maxDays));
 }
 
 const family = config.widgetFamily || "medium";
@@ -119,15 +100,15 @@ if (family === "small") {
   w.addSpacer(6);
   text(w, "还款日 " + md(best.due) + " · 尾号 " + best.tail, 12, GRAY, false);
 } else {
-  w.setPadding(14, 16, 14, 16);
+  w.setPadding(16, 16, 16, 16);
   const head = w.addStack();
   head.layoutHorizontally();
   text(head, "今天刷哪张卡", 13, WHITE, true);
   head.addSpacer();
   text(head, md(today) + " 周" + WEEK[today.getDay()], 12, GRAY, false);
-  w.addSpacer(8);
-  rows.forEach(r => row(w, r.name + " " + r.tail, r.days + " 天", md(r.due) + "还款", r.days, r === best));
-  w.addSpacer(8);
+  w.addSpacer(14);
+  rows.forEach(r => row(w, r.name + " " + r.tail, r.days + " 天 · " + md(r.due) + "还款", r.days, r === best));
+  w.addSpacer(14);
   const foot = best.days >= 57
     ? "今天就是最长窗口 · 下个最长窗口:" + md(nextWin.start) + " " + nextWin.name
     : "下个最长窗口:" + md(nextWin.start) + " " + nextWin.name;
