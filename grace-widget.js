@@ -29,7 +29,10 @@ function gradColor(days, min, max) {
 function midnight(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
 function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
 function daysBetween(a, b) { return Math.round((midnight(b) - midnight(a)) / 86400000); }
-function md(d) { return (d.getMonth() + 1) + "-" + d.getDate(); }
+function md(d) {
+  const p = n => String(n).padStart(2, "0");
+  return p(d.getMonth() + 1) + "-" + p(d.getDate());
+}
 
 const today = midnight(new Date());
 
