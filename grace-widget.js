@@ -109,7 +109,11 @@ if (family === "small") {
 
 if (config.runsInWidget) {
   Script.setWidget(w);
+  Script.complete();
 } else {
-  if (family === "small") { await w.presentSmall(); } else { await w.presentMedium(); }
+  // 预览用:包一层 async 函数,远程 eval 不支持顶层 await
+  (async () => {
+    if (family === "small") { await w.presentSmall(); } else { await w.presentMedium(); }
+    Script.complete();
+  })();
 }
-Script.complete();
