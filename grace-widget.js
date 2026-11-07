@@ -16,12 +16,14 @@ const WHITE = Color.white();
 const GRAY = new Color("#94a3b8");
 
 // 蓝(免息最长) -> 红(免息最短)渐变
+// 注意:Scriptable 的 Color 只接受十六进制字符串,先拼成 "#rrggbb" 再传
 function gradColor(days, min, max) {
   const t = max === min ? 1 : (days - min) / (max - min);
   const r = Math.round(239 + (59 - 239) * t);
   const g = Math.round(68 + (130 - 68) * t);
   const b = Math.round(68 + (246 - 68) * t);
-  return new Color(r / 255, g / 255, b / 255);
+  const h = v => v.toString(16).padStart(2, "0");
+  return new Color("#" + h(r) + h(g) + h(b));
 }
 
 function midnight(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
