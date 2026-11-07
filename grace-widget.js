@@ -71,10 +71,10 @@ function text(parent, str, size, color, bold) {
   return t;
 }
 
-// 等宽字体(Menlo):数字、点、空格宽度固定,各行严格对齐
-function mtext(parent, str, size, color) {
+// 等宽字体:数字、点、空格宽度固定,各行严格对齐
+function mtext(parent, str, size, color, bold) {
   const t = parent.addText(str);
-  t.font = new Font("Menlo-Regular", size);
+  t.font = bold ? Font.semiboldMonospacedSystemFont(size) : Font.regularMonospacedSystemFont(size);
   t.textColor = color;
   t.leftAlignText();
   return t;
@@ -103,7 +103,7 @@ function valueStack(parent, daysStr, dateStr, color) {
   const c2 = s.addStack(); c2.size = new Size(DOT_W, 15);
   mtext(c2, "·", 12, color);
   const c3 = s.addStack(); c3.size = new Size(DATE_W, 15);
-  mtext(c3, dateStr, 12, color);
+  const t3 = mtext(c3, dateStr, 12, color); t3.rightAlignText();
   return s;
 }
 
@@ -115,7 +115,7 @@ if (family === "small") {
   w.addSpacer(4);
   text(w, best.name, 24, WHITE, true);
   w.addSpacer(2);
-  mtext(w, "免息 " + best.days + " 天", 26, gradColor(best.days, minDays, maxDays));
+  mtext(w, "免息 " + best.days + " 天", 26, gradColor(best.days, minDays, maxDays), true);
   w.addSpacer(6);
   text(w, "还款日 " + md(best.due) + " · 尾号 " + best.tail, 12, GRAY, false);
 } else {
@@ -131,7 +131,7 @@ if (family === "small") {
   text(big, best.name + " 尾号 " + best.tail, 20, WHITE, true);
   big.addSpacer();
   const bDays = big.addStack(); bDays.size = new Size(COL_W, 26);
-  mtext(bDays, best.days + " 天免息", 20, gradColor(best.days, minDays, maxDays));
+  const bt = mtext(bDays, best.days + " 天免息", 20, gradColor(best.days, minDays, maxDays), true); bt.rightAlignText();
   w.addSpacer(4);
   rows.forEach(r => row(w, r.name + " " + r.tail, r.days + " 天", md(r.due) + " 还", r.days, r === best));
   w.addSpacer(4);
