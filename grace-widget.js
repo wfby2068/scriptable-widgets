@@ -5,7 +5,7 @@
 const CARDS = [
   { name: "CSP", tail: "4588", closeDay: 24 },
   { name: "Flex", tail: "5349", closeDay: 20 },
-  { name: "Freedom Unlimited", tail: "8285", closeDay: 19 },
+  { name: "CFU", tail: "8285", closeDay: 19 },
   { name: "Slate", tail: "5253", closeDay: 16 },
   { name: "Boundless", tail: "8248", closeDay: 10 },
 ];
@@ -71,12 +71,31 @@ function text(parent, str, size, color, bold) {
   return t;
 }
 
-function row(parent, left, right, days, highlight) {
+function row(parent, left, daysStr, dateStr, days, highlight) {
   const s = parent.addStack();
   s.layoutHorizontally();
   text(s, left, 12, WHITE, highlight);
   s.addSpacer();
-  text(s, right, 12, gradColor(days, minDays, maxDays), highlight);
+  valueStack(s, daysStr, dateStr, gradColor(days, minDays, maxDays), highlight);
+}
+
+// 右侧三栏固定宽度:天数 | 点 | 日期,各行左对齐,点和日期严格对齐
+const COL_W = 108;
+const DAYS_W = 36;
+const DOT_W = 14;
+const DATE_W = 58;
+
+function valueStack(parent, daysStr, dateStr, color, bold) {
+  const s = parent.addStack();
+  s.layoutHorizontally();
+  s.size = new Size(COL_W, 15);
+  const c1 = s.addStack(); c1.size = new Size(DAYS_W, 15);
+  const t1 = text(c1, daysStr, 12, color, bold); t1.leftAlignText();
+  const c2 = s.addStack(); c2.size = new Size(DOT_W, 15);
+  const t2 = text(c2, "·", 12, color, bold); t2.leftAlignText();
+  const c3 = s.addStack(); c3.size = new Size(DATE_W, 15);
+  const t3 = text(c3, dateStr, 12, color, bold); t3.leftAlignText();
+  return s;
 }
 
 const family = config.widgetFamily || "medium";
@@ -102,9 +121,10 @@ if (family === "small") {
   big.layoutHorizontally();
   text(big, best.name + " 尾号 " + best.tail, 20, WHITE, true);
   big.addSpacer();
-  text(big, best.days + " 天免息", 20, gradColor(best.days, minDays, maxDays), true);
+  const bDays = big.addStack(); bDays.size = new Size(COL_W, 26);
+  const bt = text(bDays, best.days + " 天免息", 20, gradColor(best.days, minDays, maxDays), true); bt.leftAlignText();
   w.addSpacer(4);
-  rows.forEach(r => row(w, r.name + " " + r.tail, r.days + " 天 · " + md(r.due) + " 还", r.days, r === best));
+  rows.forEach(r => row(w, r.name + " " + r.tail, r.days + " 天", md(r.due) + " 还", r.days, r === best));
   w.addSpacer(4);
   const foot = best.days >= 57
     ? "今天就是最长窗口 · 下个最长窗口:" + md(nextWin.start) + " " + nextWin.name
