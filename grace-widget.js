@@ -71,7 +71,7 @@ function text(parent, str, size, color, bold) {
 function row(parent, left, right, days, highlight) {
   const s = parent.addStack();
   s.layoutHorizontally();
-  text(s, left, 12, highlight ? WHITE : GRAY, highlight);
+  text(s, left, 12, WHITE, highlight);
   s.addSpacer();
   text(s, right, 12, gradColor(days, minDays, maxDays), highlight);
 }
